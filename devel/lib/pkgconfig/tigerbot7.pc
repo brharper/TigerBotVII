@@ -1,8 +1,8 @@
-prefix=/home/bryan/TigerBotVII/devel
+prefix=/usr/local/ROSWS/TigerBotVII/devel
 
 Name: tigerbot7
 Description: Description of tigerbot7
 Version: 0.0.0
 Cflags: 
-Libs: -L/home/bryan/TigerBotVII/devel/lib 
+Libs: -L/usr/local/ROSWS/TigerBotVII/devel/lib 
 Requires: 

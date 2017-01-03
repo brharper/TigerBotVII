@@ -1,2 +1,2 @@
 - setup-file:
-    local-name: /home/bryan/TigerBotVII/devel/setup.sh
+    local-name: /usr/local/ROSWS/TigerBotVII/devel/setup.sh

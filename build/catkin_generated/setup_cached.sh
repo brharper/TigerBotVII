@@ -7,5 +7,7 @@
 # new environment variables
 
 # modified environment variables
-export PKG_CONFIG_PATH="/home/bryan/TigerBotVII/devel/lib/pkgconfig:$PKG_CONFIG_PATH"
-export PWD="/home/bryan/TigerBotVII/build"
+export CMAKE_PREFIX_PATH="/usr/local/ROSWS/TigerBotVII/devel:$CMAKE_PREFIX_PATH"
+export PWD="/usr/local/ROSWS/TigerBotVII/build"
+export ROSLISP_PACKAGE_DIRECTORIES="/usr/local/ROSWS/TigerBotVII/devel/share/common-lisp"
+export ROS_PACKAGE_PATH="/usr/local/ROSWS/TigerBotVII/src:$ROS_PACKAGE_PATH"

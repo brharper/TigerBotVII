@@ -1,8 +1,8 @@
-# Install script for directory: /home/bryan/TigerBotVII/src/tigerbot7
+# Install script for directory: /usr/local/ROSWS/TigerBotVII/src/tigerbot7
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/bryan/TigerBotVII/install")
+  set(CMAKE_INSTALL_PREFIX "/usr/local/ROSWS/TigerBotVII/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,17 +33,17 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/bryan/TigerBotVII/build/tigerbot7/catkin_generated/installspace/tigerbot7.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/usr/local/ROSWS/TigerBotVII/build/tigerbot7/catkin_generated/installspace/tigerbot7.pc")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/tigerbot7/cmake" TYPE FILE FILES
-    "/home/bryan/TigerBotVII/build/tigerbot7/catkin_generated/installspace/tigerbot7Config.cmake"
-    "/home/bryan/TigerBotVII/build/tigerbot7/catkin_generated/installspace/tigerbot7Config-version.cmake"
+    "/usr/local/ROSWS/TigerBotVII/build/tigerbot7/catkin_generated/installspace/tigerbot7Config.cmake"
+    "/usr/local/ROSWS/TigerBotVII/build/tigerbot7/catkin_generated/installspace/tigerbot7Config-version.cmake"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/tigerbot7" TYPE FILE FILES "/home/bryan/TigerBotVII/src/tigerbot7/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/tigerbot7" TYPE FILE FILES "/usr/local/ROSWS/TigerBotVII/src/tigerbot7/package.xml")
 endif()
 

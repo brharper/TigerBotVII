@@ -1,2 +1,2 @@
 tigerbot7
--DCATKIN_DEVEL_PREFIX=/home/bryan/TigerBotVII/devel -DCMAKE_INSTALL_PREFIX=/home/bryan/TigerBotVII/install -G Unix Makefiles
+-DCATKIN_DEVEL_PREFIX=/usr/local/ROSWS/TigerBotVII/devel -DCMAKE_INSTALL_PREFIX=/usr/local/ROSWS/TigerBotVII/install -G Unix Makefiles
