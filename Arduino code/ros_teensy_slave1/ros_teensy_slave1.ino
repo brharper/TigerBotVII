@@ -11,7 +11,6 @@
 #include <ros.h>
 #include <std_msgs/String.h>
 #include <std_msgs/Empty.h>
-#include <bond.h>
 unsigned long publish_time;
 
 ros::NodeHandle nh1;
