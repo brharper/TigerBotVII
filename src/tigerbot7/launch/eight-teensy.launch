@@ -1,23 +1,23 @@
 <launch>
- <node pkg="rosserial_python" type="serial_node.py" name="rosserial1" output="screen" launch-prefix="xterm -e" respawn="true" respawn_delay="3">
+ <node pkg="rosserial_python" type="serial_node.py" name="rosserial1" output="screen"  respawn="true" respawn_delay="3">
   <param name="port" value="/dev/teensy1" />
 </node>
 
- <node pkg="rosserial_python" type="serial_node.py" name="rosserial2" output="screen" launch-prefix="xterm -e" respawn="true" respawn_delay="3">
+ <node pkg="rosserial_python" type="serial_node.py" name="rosserial2" output="screen"  respawn="true" respawn_delay="3">
   <param name="port" value="/dev/teensy2" />
 </node>
 
- <node pkg="rosserial_python" type="serial_node.py" name="rosserial3" output="screen" launch-prefix="xterm -e" respawn="true" respawn_delay="3">
+ <node pkg="rosserial_python" type="serial_node.py" name="rosserial3" output="screen"  respawn="true" respawn_delay="3">
   <param name="port" value="/dev/teensy3" />
 </node>
 
- <node pkg="rosserial_python" type="serial_node.py" name="rosserial4" output="screen" launch-prefix="xterm -e" respawn="true" respawn_delay="3">
+ <node pkg="rosserial_python" type="serial_node.py" name="rosserial4" output="screen" respawn="true" respawn_delay="3">
   <param name="port" value="/dev/teensy4" />
 </node>
- <node pkg="rosserial_python" type="serial_node.py" name="rosserial5" output="screen" launch-prefix="xterm -e" respawn="true" respawn_delay="3">
+ <node pkg="rosserial_python" type="serial_node.py" name="rosserial5" output="screen"  respawn="true" respawn_delay="3">
   <param name="port" value="/dev/teensy5" />
 </node>
- <node pkg="rosserial_python" type="serial_node.py" name="rosserial6" output="screen" launch-prefix="xterm -e" respawn="true" respawn_delay="3">
+ <node pkg="rosserial_python" type="serial_node.py" name="rosserial6" output="screen"  respawn="true" respawn_delay="3">
   <param name="port" value="/dev/teensy6" />
 </node>
  <node pkg="rosserial_python" type="serial_node.py" name="rosserial7" output="screen" respawn="true" respawn_delay="3">

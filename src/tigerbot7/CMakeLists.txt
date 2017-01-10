@@ -5,11 +5,10 @@ project(tigerbot7)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  rospy
-  rosserial_arduino
-  rosserial_python
-  std_msgs
+	roscpp
+	rospy
+	std_msgs
+	message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -45,12 +44,12 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * uncomment the generate_messages entry below
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
-## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+# Generate messages in the 'msg' folder
+ add_message_files(
+   FILES
+   servoInfo.msg
+
+ )
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -66,11 +65,11 @@ find_package(catkin REQUIRED COMPONENTS
 #   Action2.action
 # )
 
-## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+# Generate added messages and services with any dependencies listed here
+ generate_messages(
+   DEPENDENCIES
+   std_msgs  # Or other packages containing msgs
+ )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -102,11 +101,18 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES tigerbot7
-#  CATKIN_DEPENDS roscpp rospy rosserial rosserial-arduino rosserial-python std_msgs
-#  DEPENDS system_lib
+  #INCLUDE_DIRS include
+  #LIBRARIES tigerbot7
+  CATKIN_DEPENDS message_runtime
+  #DEPENDS system_lib
 )
+
+include_directories(include ${catkin_INCLUDE_DIRS})
+
+add_executable(heartbeat src/heartbeat.cpp)
+target_link_libraries(heartbeat ${catkin_LIBRARIES})
+add_dependencies(heartbeat tigerbot7_generate_messages_cpp)
+
 
 ###########
 ## Build ##
@@ -115,9 +121,6 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 # include_directories(include)
-include_directories(
-  ${catkin_INCLUDE_DIRS}
-)
 
 ## Declare a C++ library
 # add_library(tigerbot7
