@@ -113,6 +113,10 @@ add_executable(heartbeat src/heartbeat.cpp)
 target_link_libraries(heartbeat ${catkin_LIBRARIES})
 add_dependencies(heartbeat tigerbot7_generate_messages_cpp)
 
+add_executable(comm_test src/comm_test.cpp)
+target_link_libraries(comm_test ${catkin_LIBRARIES})
+add_dependencies(comm_test tigerbot7_generate_messages_cpp)
+
 
 ###########
 ## Build ##

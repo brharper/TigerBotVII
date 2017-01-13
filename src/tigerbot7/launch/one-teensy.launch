@@ -1,6 +1,6 @@
 <launch>
  <node pkg="rosserial_python" type="serial_node.py" name="rosserial1" output="screen" launch-prefix="xterm -e">
-  <param name="port" value="/dev/ttyACM0" />
+  <param name="port" value="/dev/teensy8-temp" />
 </node>
 </launch>
 
