@@ -17,11 +17,12 @@
  *  Teensy: subscriber for Odroid's ready and finish, publisher for teensy to odroid test and for ready and finish messages. Others are log messages
  *  ODroid: subsciber for Teensy's ready and finish, publisher for odroid to teensy and ready/finish messages.
  *  
- * 1/12/17
+ * 1/18/17
  */
 
 #include <ros.h>
 #include <std_msgs/Empty.h>
+#include <std_msgs/Int8.h>
 #include <std_msgs/Int16.h>
 #include <std_msgs/Int64.h>
 #include <std_msgs/Bool.h>
@@ -30,25 +31,22 @@
 #include <std_msgs/String.h>
 unsigned long Odump_begin, Odump_end, Tdump_begin, Tdump_end;
 boolean Oready_flag=0, Ofinished_flag=0;
-int32_t id=0;
+int32_t id=1;
+int8_t teensy_id=1;
 float Tdump_duration, Odump_duration;
 int count=0, message_num=100;
 
 ros::NodeHandle nh1;
 
-std_msgs::Bool Tready_flag, Tfinished_flag;
+std_msgs::Int8 Tready_flag, Tfinished_flag;
 
 std_msgs::Int64 id_msg;
 std_msgs::Int16 num_msg;
-std_msgs::Time message_start;
 
-
-ros::Publisher pub1("Tdump", &id_msg);
-ros::Publisher pub2("Tready", &Tready_flag);
-ros::Publisher pub3("Tfinished", &Tfinished_flag);
-ros::Publisher pub4("Teensy_info", &num_msg);
-ros::Publisher pub5("Teensy_time1", &message_start);
-
+ros::Publisher pub1('Tdump1', &id_msg);
+ros::Publisher pub2("Tready1", &Tready_flag);
+ros::Publisher pub3("Tfinished1", &Tfinished_flag);
+ros::Publisher pub4("Teensy_info1", &num_msg);
 
 
 //When the subscribed topic sees a message, this function is called
@@ -70,7 +68,7 @@ void messageCb3( const std_msgs::Int64& rec_msg){
 }
 ros::Subscriber<std_msgs::Bool> sub1("Oready", &messageCb1 );
 ros::Subscriber<std_msgs::Bool> sub2("Ofinished", &messageCb2 );
-ros::Subscriber<std_msgs::Int64> sub3("Odump", &messageCb3 );
+ros::Subscriber<std_msgs::Int64> sub3("Odump1", &messageCb3 );
 
 
 
@@ -85,7 +83,6 @@ void setup()
   nh1.advertise(pub2);
   nh1.advertise(pub3);
   nh1.advertise(pub4);
-   nh1.advertise(pub5);
   nh1.subscribe(sub1);
   nh1.subscribe(sub2);
   nh1.subscribe(sub3);
@@ -102,7 +99,7 @@ void setup()
 void loop()
 {  
   //Odroid to Teensy
-  Tready_flag.data=true;
+  Tready_flag.data=teensy_id;
   pub2.publish(&Tready_flag);
   //Odump_begin=millis();
   while(count!=message_num){
@@ -140,7 +137,7 @@ void loop()
   }
   nh1.spinOnce();
   Tdump_end=millis();
-  Tfinished_flag.data=true;
+  Tfinished_flag.data=teensy_id;
   pub3.publish(&Tfinished_flag);
   nh1.spinOnce();
   nh1.loginfo("Message dump finished");
@@ -155,7 +152,7 @@ void loop()
 
 
   //Both Odroid and Teensy sending data
-  Tready_flag.data=true;
+  Tready_flag.data=teensy_id;
   pub2.publish(&Tready_flag);
   while(!Oready_flag) {
     nh1.spinOnce();
@@ -169,7 +166,7 @@ void loop()
     nh1.spinOnce();
   }
   Tdump_end=millis();
-  Tfinished_flag.data=true;
+  Tfinished_flag.data=teensy_id;
   pub3.publish(&Tfinished_flag);
   nh1.spinOnce();
   nh1.loginfo("Message dump finished");
@@ -196,15 +193,12 @@ void loop()
 //  pub3.publish(&Tfinished_flag);
 nh1.loginfo("Finished with test");
   id_msg.data=id;
-   message_start.data = nh1.now();
-   pub1.publish(&id_msg);
-  pub5.publish(&message_start);
   nh1.loginfo("Entering loop");
 while(1) {
   //pub1.publish(&id_msg);
     nh1.spinOnce();
     //delay(1);
-    //nh1.loginfo("In loop now");
+    //nh1.loginfo("In loop now");2
 
   }
 

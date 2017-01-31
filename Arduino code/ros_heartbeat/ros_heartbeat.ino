@@ -15,19 +15,19 @@
 #include <ros.h>
 #include <std_msgs/String.h>
 #include <std_msgs/Empty.h>
-#include <std_msgs/Int8.h>
+#include <std_msgs/Int64.h>
 #include <std_msgs/Bool.h>
 unsigned long publish_time, publish_time_hb;
 boolean action_flag=0;  //Wait until heartbeat node confirms go-ahead
-int8_t id=2;
+int64_t id;
 
 ros::NodeHandle nh1;
 
 std_msgs::String str_msg;
-std_msgs::Int8 id_msg;  //For Heartbeat status
+std_msgs::Int64 id_msg;  //For Heartbeat status
 
 ros::Publisher chatter1("chatter1", &str_msg);
-ros::Publisher heartbeat2("heartbeat2", &id_msg);
+ros::Publisher heartbeat("heartbeat", &id_msg);
 
 char hello1[13] = "hello world!";
 
@@ -62,6 +62,11 @@ void setup()
   while (!nh1.connected()) {
     nh1.spinOnce();
   }
+  int param_id;
+  if (! nh1.getParam("~teensy_id", &param_id, 1)) {
+    param_id = 1;
+  }
+  id=param_id;
   digitalWrite(13,LOW);
   nh1.loginfo("I see connection");
 
@@ -69,21 +74,23 @@ void setup()
 
 void loop()
 {
-  //The publisher publishes a message at 2Hz
   str_msg.data = hello1;
   id_msg.data=id;
-  if (millis()-publish_time>500) {
-    chatter1.publish( &str_msg );
-    publish_time=millis();
-  }
-  if (millis()-publish_time_hb>100) {
+//  if (millis()-publish_time>500) {
+//    chatter1.publish( &str_msg );
+//    publish_time=millis();
+//  }
+  //if (millis()-publish_time_hb>1) {
     heartbeat2.publish( &id_msg );
-    publish_time_hb=millis();
-  }
+    //publish_time_hb=millis();
+  //}
   
   nh1.spinOnce();
   delay(1);
+
+  // Check if Teensy is connected to ROS
   if(!nh1.connected()) {
+    // Not connected- blink onboard LED 
     for (int i=0; i<3; i++) {
       digitalWrite(13,HIGH);
       delay(100);

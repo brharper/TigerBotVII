@@ -1,10 +1,8 @@
 /*
-   Testing motors using ROS
-   Has a publisher since it used past ROS test code
-   Moves motors when it sees a message on the topic it's subscribed to
-   Motor movement is movement in one direction for 5 seconds
-   (Toggles direction and LED every time it's called)
-   Motor code taken from Left_Leg_Motor_Test, look there for more explanation of code
+   Initially meant to test motor using IMU (see ros_accel_motor_test for that)
+   Code copied from ros_motor_test
+   In loop(), tests whether duty cycle has any effect on speed (it doesn't)
+   Varies duty cycle at set frequency, then varies frequency w/ set duty cycle
 */
 
 #include <ros.h>
@@ -55,12 +53,12 @@ void setup()
   pinMode(LAnkleFB_A, OUTPUT);
   pinMode(LAnkleFB_B, OUTPUT);
   analogWriteResolution(8);
-  analogWriteFrequency(LAnkleFB_B, 50000);
+  analogWriteFrequency(LAnkleFB_B, 5000);
   //Have motor enabled, but off
   analogWrite(LAnkleFB_B, 0);  
   digitalWrite(LAnkleFB_Enable, HIGH);
   Serial.begin(9800);
-
+  digitalWrite(13,HIGH);
   nh1.initNode();
   nh1.advertise(chatter1);
   nh1.subscribe(sub1);
@@ -87,7 +85,7 @@ for (int i=1; i<=5; i++){
 analogWrite(LAnkleFB_B, 127);
 
 for (int j=1; j<=5; j++){
-  motor_vel=j*10000;
+  motor_vel=j*1000;
   analogWriteFrequency(LAnkleFB_B, motor_vel);
   delay(1000);
   Serial.print("analogWriteFrequency:");

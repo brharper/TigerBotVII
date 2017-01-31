@@ -39,11 +39,11 @@ RTIMUSettings *settings;                              // the settings object
 
 //  DISPLAY_INTERVAL sets the rate at which results are displayed
 
-#define DISPLAY_INTERVAL  300                         // interval between pose displays
+#define DISPLAY_INTERVAL  100                         // interval between pose displays
 
 //  SERIAL_PORT_SPEED defines the speed to use for the debug serial port
 
-#define  SERIAL_PORT_SPEED  115200
+#define  SERIAL_PORT_SPEED  57600
 
 #define G_2_MPSS 9.80665
 #define uT_2_T 1000000
@@ -147,7 +147,7 @@ void loop()
           imu_msg.angular_velocity.y = imuData.gyro.y();
           imu_msg.angular_velocity.z = imuData.gyro.z();
       
-          imu_msg.linear_acceleration.x = imuData.accel.x() * G_2_MPSS;
+          imu_msg.linear_acceleration.x = imuData.accel.x(); //* G_2_MPSS;
           imu_msg.linear_acceleration.y = imuData.accel.y() * G_2_MPSS;
           imu_msg.linear_acceleration.z = imuData.accel.z() * G_2_MPSS;
       
@@ -156,7 +156,7 @@ void loop()
           //if (imuData.compassValid)
     
           mag_msg.header.frame_id=imu_frame_id_;
-          mag_msg.header.stamp=ros::Time::now();
+          mag_msg.header.stamp=nh.now();
     
           mag_msg.magnetic_field.x = imuData.compass.x()/uT_2_T;
           mag_msg.magnetic_field.y = imuData.compass.y()/uT_2_T;
@@ -168,7 +168,7 @@ void loop()
           euler_msg.x = imuData.fusionPose.x();
           euler_msg.y = imuData.fusionPose.y();
           euler_msg.z = -imuData.fusionPose.z();
-          euler_msg.z = (-imuData.fusionPose.z()) - declination_radians_;
+          //euler_msg.z = (-imuData.fusionPose.z()) - declination_radians_;
           euler_pub_.publish(&euler_msg);
             
         }
