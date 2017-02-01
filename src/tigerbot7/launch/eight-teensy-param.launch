@@ -1,0 +1,76 @@
+<launch>
+ <node pkg="rosserial_python" type="serial_node.py" name="rosserial1" output="screen"  respawn="true" respawn_delay="3">
+  <param name="port" value="/dev/teensy1" />
+  <param name="teensy_id" value="1" />
+  <param name="message_number" value="500" />
+  <param name="loop_delay" value="15000" />
+  <param name="more_topics" value="1" />
+<remap from="heartbeat1" to ="heartbeat"/>
+</node>
+
+ <node pkg="rosserial_python" type="serial_node.py" name="rosserial2" output="screen"  respawn="true" respawn_delay="3">
+  <param name="port" value="/dev/teensy2" />
+  <param name="teensy_id" value="2" />
+  <param name="message_number" value="500" />
+  <param name="loop_delay" value="15000" />
+  <param name="more_topics" value="1" />
+<remap from="heartbeat2" to ="heartbeat"/>
+</node>
+
+ <node pkg="rosserial_python" type="serial_node.py" name="rosserial3" output="screen"  respawn="true" respawn_delay="3">
+  <param name="port" value="/dev/teensy3" />
+  <param name="teensy_id" value="3" />
+  <param name="message_number" value="500" />
+  <param name="loop_delay" value="15000" />
+  <param name="more_topics" value="1" />
+<remap from="heartbeat3" to ="heartbeat"/>
+</node>
+
+ <node pkg="rosserial_python" type="serial_node.py" name="rosserial4" output="screen" respawn="true" respawn_delay="3">
+  <param name="port" value="/dev/teensy4" />
+  <param name="teensy_id" value="4" />
+  <param name="message_number" value="500" />
+  <param name="loop_delay" value="15000" />
+  <param name="more_topics" value="1" />
+<remap from="heartbeat4" to ="heartbeat"/>
+</node>
+
+ <node pkg="rosserial_python" type="serial_node.py" name="rosserial5" output="screen"  respawn="true" respawn_delay="3">
+  <param name="port" value="/dev/teensy5" />
+  <param name="teensy_id" value="5" />
+  <param name="message_number" value="500" />
+  <param name="loop_delay" value="15000" />
+  <param name="more_topics" value="1" />
+<remap from="heartbeat5" to ="heartbeat"/>
+</node>
+
+ <node pkg="rosserial_python" type="serial_node.py" name="rosserial6" output="screen"  respawn="true" respawn_delay="3">
+  <param name="port" value="/dev/teensy6" />
+  <param name="teensy_id" value="6" />
+  <param name="message_number" value="500" />
+  <param name="loop_delay" value="15000" />
+  <param name="more_topics" value="1" />
+<remap from="heartbeat6" to ="heartbeat"/>
+</node>
+
+ <node pkg="rosserial_python" type="serial_node.py" name="rosserial7" output="screen" respawn="true" respawn_delay="3">
+  <param name="port" value="/dev/teensy7" />
+  <param name="teensy_id" value="7" />
+  <param name="message_number" value="500" />
+  <param name="loop_delay" value="15000" />
+  <param name="more_topics" value="1" />
+<remap from="heartbeat7" to ="heartbeat"/>
+</node>
+
+ <node pkg="rosserial_python" type="serial_node.py" name="rosserial8" output="screen" respawn="true" respawn_delay="3">
+  <param name="port" value="/dev/teensy8" />
+  <param name="teensy_id" value="8" />
+  <param name="message_number" value="500" />
+  <param name="loop_delay" value="15000" />
+  <param name="more_topics" value="1" />
+<remap from="heartbeat8" to ="heartbeat"/>
+</node>
+
+
+</launch>
+

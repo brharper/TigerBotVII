@@ -2,21 +2,23 @@
 #include "std_msgs/String.h"
 #include <std_msgs/Empty.h>
 #include <std_msgs/Int8.h>
+#include "std_msgs/Int64.h"
 #include <std_msgs/Bool.h>
 #include <std_msgs/Time.h>
 #include <std_msgs/Duration.h>
 #include <std_msgs/String.h>
 
 #include <sstream>
-ros::Time Odump_begin, Odump_end, Tdump_begin, Tdump_end;
+ros::Time Odump_begin, Odump_end, Tdump_begin, Tdump_end, Ttest_end;
 bool Tready_flag=0, Tfinished_flag=0;
-int8_t id=2;
-ros::Duration Tdump_duration, Odump_duration;
-int count, message_num;
-float secs;
+int64_t id=2;
+ros::Duration Tdump_duration, Odump_duration, latency_time;
+int count=0;
+int message_num=100;
+float secs, latency_sec;
 
 std_msgs::Bool Oready_flag, Ofinished_flag;
-std_msgs::Int8 id_msg, num_msg;
+std_msgs::Int64 id_msg;
 
 void Tready_cb( const std_msgs::Bool& bool_msg){
   Tready_flag=bool_msg.data;
@@ -28,13 +30,19 @@ void Tfinished_cb( const std_msgs::Bool& bool_msg){
   //if (Tfinished_flag) Tdump_end=ros::Time::now();
 }
 
-void count_cb( const std_msgs::Int8& rec_msg){
+void count_cb( const std_msgs::Int64& rec_msg){
   count++;
+  Ttest_end=ros::Time::now();
   if (count ==1) {Tdump_begin=ros::Time::now();}
-  if (count==100) Tdump_end=ros::Time::now();
+  if (count==message_num) Tdump_end=ros::Time::now();
 
 }
 
+void Ttime_cb( const std_msgs::Time& time_msg){
+  latency_time=Ttest_end-time_msg.data;
+  latency_sec=latency_time.toSec();
+  ROS_INFO("Time to receive pub message is %f seconds",latency_sec);
+}
 
 
 /**
@@ -81,10 +89,11 @@ int main(int argc, char **argv)
   ros::Subscriber sub1 = n.subscribe("Tdump", 1000, count_cb);
   ros::Subscriber sub2 = n.subscribe("Tready", 1000, Tready_cb);
   ros::Subscriber sub3 = n.subscribe("Tfinished", 1000, Tfinished_cb);
+  ros::Subscriber sub4 = n.subscribe("Teensy_time1", 1000, Ttime_cb);
   
   ros::Publisher pub1 = n.advertise<std_msgs::Bool>("Oready", 1000 );
   ros::Publisher pub2 = n.advertise<std_msgs::Bool>("Ofinished", 1000 );
-  ros::Publisher pub3 = n.advertise<std_msgs::Int8>("Odump", 1000);
+  ros::Publisher pub3 = n.advertise<std_msgs::Int64>("Odump", 1000);
 
   ros::Rate loop_rate(10);
 
@@ -102,7 +111,7 @@ int main(int argc, char **argv)
 	  }
 	  Tready_flag=0;
 	  id_msg.data=0;
-	  message_num=100;
+	  
 	  ROS_INFO("Starting ODroid message dump");
 	  Odump_begin=ros::Time::now();
 	  for (int i=0; i<message_num; i++) {
@@ -123,7 +132,7 @@ int main(int argc, char **argv)
 	  Oready_flag.data=true;
 	  pub1.publish(Oready_flag);
 	  //Odump_begin=millis();
-	  while(count!=100){
+	  while(count!=message_num){
 		ros::spinOnce();
 	  }
 	  ros::spinOnce();
@@ -155,7 +164,7 @@ int main(int argc, char **argv)
 	  Odump_duration=(Odump_end-Odump_begin);
 	  secs=Odump_duration.toSec();
 	  ROS_INFO("ODroid and Teensy dump: Odroid took %f seconds to send %d messages", secs, message_num);
-	  while(count!=100){
+	  while(count!=message_num){
 		ros::spinOnce();
 	  }
 	  ros::spinOnce();
@@ -163,12 +172,13 @@ int main(int argc, char **argv)
 	  Tdump_duration=(Tdump_end-Tdump_begin);
 	  secs=Tdump_duration.toSec();
 	  ROS_INFO("ODroid and Teensy dump: Odroid took %f seconds to receive %d messages", secs, count);
-	  
-	  
+	 
 	  ROS_INFO("Relaunch nodes to repeat test");
 
-	while(ros::ok()) {}
-
+	while(ros::ok()) {
+	  pub3.publish( id_msg );
+	  ros::spinOnce();
+	}
 
   }
 

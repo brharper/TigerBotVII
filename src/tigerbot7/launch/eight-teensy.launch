@@ -24,7 +24,7 @@
   <param name="port" value="/dev/teensy7" />
 </node>
  <node pkg="rosserial_python" type="serial_node.py" name="rosserial8" output="screen" respawn="true" respawn_delay="3">
-  <param name="port" value="/dev/teensy8-temp" />
+  <param name="port" value="/dev/teensy8" />
 </node>
 
 

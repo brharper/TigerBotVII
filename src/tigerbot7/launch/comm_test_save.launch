@@ -1,0 +1,4 @@
+<launch>
+<node pkg="rosbag" type="record" name="rosbag_comm_test" output="screen"
+       args="  /Teensy_info1 /Teensy_info2 /Teensy_info3 /Teensy_info4 /Teensy_info5 /Teensy_info6 /Teensy_info7 /Teensy_info8 "/> 
+</launch>

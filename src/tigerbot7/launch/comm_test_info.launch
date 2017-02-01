@@ -1,0 +1,18 @@
+<launch>
+<node name="info1" pkg="rostopic" type="rostopic" output="screen" launch-prefix="xterm -e" args="echo /Teensy_info1">
+</node>
+<node name="info2" pkg="rostopic" type="rostopic" output="screen" launch-prefix="xterm -e" args="echo /Teensy_info2">
+</node>
+<node name="info3" pkg="rostopic" type="rostopic" output="screen" launch-prefix="xterm -e" args="echo /Teensy_info3">
+</node>
+<node name="info4" pkg="rostopic" type="rostopic" output="screen" launch-prefix="xterm -e" args="echo /Teensy_info4">
+</node>
+<node name="info5" pkg="rostopic" type="rostopic" output="screen" launch-prefix="xterm -e" args="echo /Teensy_info5">
+</node>
+<node name="info6" pkg="rostopic" type="rostopic" output="screen" launch-prefix="xterm -e" args="echo /Teensy_info6">
+</node>
+<node name="info7" pkg="rostopic" type="rostopic" output="screen" launch-prefix="xterm -e" args="echo /Teensy_info7">
+</node>
+<node name="info8" pkg="rostopic" type="rostopic" output="screen" launch-prefix="xterm -e" args="echo /Teensy_info8">
+</node>
+</launch>

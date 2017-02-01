@@ -117,6 +117,18 @@ add_executable(comm_test src/comm_test.cpp)
 target_link_libraries(comm_test ${catkin_LIBRARIES})
 add_dependencies(comm_test tigerbot7_generate_messages_cpp)
 
+add_executable(comm_test_multiple src/comm_test_multiple.cpp)
+target_link_libraries(comm_test_multiple ${catkin_LIBRARIES})
+add_dependencies(comm_test_multiple tigerbot7_generate_messages_cpp)
+
+add_executable(comm_test_multiple_v2 src/comm_test_multiple_v2.cpp)
+target_link_libraries(comm_test_multiple_v2 ${catkin_LIBRARIES})
+add_dependencies(comm_test_multiple_v2 tigerbot7_generate_messages_cpp)
+
+add_executable(accel_motor src/accel_motor.cpp)
+target_link_libraries(accel_motor ${catkin_LIBRARIES})
+add_dependencies(accel_motor tigerbot7_generate_messages_cpp)
+
 
 ###########
 ## Build ##

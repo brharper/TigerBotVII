@@ -1,6 +1,7 @@
 #include "ros/ros.h"
-#include "std_msgs/Int8.h"
+#include "std_msgs/Int32.h"
 #include "std_msgs/Bool.h"
+#include "sensor_msgs/Imu.h"
 
 /**
  * num is number of Teensys to keep track of
@@ -9,17 +10,18 @@
  * action_flag is the boolean message sent out that all the Teensy nodes subscribe to. If false, Teensys all stop doing what they're doing.
  */
 
-const int num=8;
-ros::Time timestamp[num];
-ros::Duration timeout(0.5);
-bool action_flag=false;
+//const int num=8;
+//ros::Time timestamp[num];
+//ros::Duration timeout(0.5);
+float accel_val;
+std_msgs::Int32 motor_vel;
 
 /** The callback function for each heartbeat message, which consists of an int.
  * The int identifies which Teensy it came from, and puts the current time into an array at that index
  */
-void heartbeatCallback(const std_msgs::Int8 msg)
+void imuCallback(const sensor_msgs::Imu msg)
 {
-  timestamp[msg.data-1] = ros::Time::now();
+  accel_val=msg.linear_acceleration.x;
 }
 
 /**
@@ -34,28 +36,15 @@ int main(int argc, char **argv)
 
   ros::NodeHandle n;
 
-  ros::Publisher pause_pub = n.advertise<std_msgs::Bool>("do_action", 1000);
-  ros::Subscriber sub1 = n.subscribe("heartbeat", 1000, heartbeatCallback);
-  //ros::Subscriber sub2 = n.subscribe("heartbeat2", 1000, heartbeatCallback);
+  ros::Publisher motor_pub = n.advertise<std_msgs::Int32>("motor_speed", 1000);
+  ros::Subscriber sub1 = n.subscribe("imu_data", 1000, imuCallback);
 
-  ros::Rate loop_rate(20);
+  ros::Rate loop_rate(10);
   
   while (ros::ok())
   {
-    bool status_flag=true;
-    ros::Time current_time=ros::Time::now();
-    for (int i=0; i<num; i++) {
-       if ((current_time-timestamp[i])>timeout) {
-	  status_flag=false;
-       }
-    }
-    if (status_flag!=action_flag) {
-       action_flag=status_flag;
-       std_msgs::Bool msg;
-       msg.data=action_flag;
-       pause_pub.publish(msg);
-       ROS_INFO("Status has changed");
-    }
+    motor_vel.data=accel_val*6000;
+    motor_pub.publish(motor_vel);
 
     ros::spinOnce();
 
