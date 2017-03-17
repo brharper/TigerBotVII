@@ -7,7 +7,16 @@
 //About set_zero_point: When it works correctly, sets current position reading to zero. Appears to work when power isn't cycled afterwards.
 // Cycling seems to add a random offset to the reading.
 // Some issues may be caused by wiring issues, since SPI messages get messed up by moving encoder/wires
+//eg: not getting a 16 response while reading, getting only 37 degrees (17, 165) probably means power issue, check if encoder's drawing ~11mA or not
 //2/22/17
+
+//Times: reading takes 0.010s total (.002 for first command + .004 in loop + .004 til end)
+//       zero point takes 0.012s total (.002 for first command, .010 in loop until done)
+//Overload by sending 0x10 in loop: first reading takes .01, sequential readings take .006, zero-point takes .014
+//Overload by sending 0x10 when reading pos data: kills zero-point
+
+//Need to figure out timing of overloading, if going to use it
+//3/9/17
 
 #include <SPI.h>
 
@@ -16,6 +25,7 @@
 uint16_t ABSposition = 0;
 uint16_t ABSposition_last = 0;
 uint8_t temp[2];
+unsigned long start_time=0, time_start, time1, time2, time3, timez_start, timez1, timez2, timez3;
 
 float deg = 0.00;
 
@@ -32,6 +42,7 @@ void setup()
   Serial.flush();
   delay(3000);
   Serial.println("starting");
+  start_time=millis();
 
 }
 uint8_t SPI_T (uint8_t msg)    //Repetive SPI transmit sequence
@@ -43,13 +54,14 @@ uint8_t SPI_T (uint8_t msg)    //Repetive SPI transmit sequence
    msg_temp = SPI.transfer(msg);    //send and recieve
    delay(1);
    digitalWrite(CS,HIGH);    //deselect spi device
-   //Serial.println(msg_temp);
+   Serial.println(msg_temp);
    return(msg_temp);      //return recieved byte
+   
 }
 
 void loop()
 { 
-  Serial.println("Reading positions");
+  //Serial.println("Reading positions");
   uint8_t recieved = 0xA5;    //just a temp vairable
   for(int i= 0; i<100; i++){
    
@@ -61,16 +73,17 @@ void loop()
    //Serial.println("Sending read command");
    //SPI_T(0x70);   //issue read command
 
-   
+   time_start=micros();
    recieved = SPI_T(0x10);    //issue NOP to check if encoder is ready to send
    //Serial.println("In loop");
+   time1=micros();
    while (recieved != 0x10)    //loop while encoder is not ready to send
    {
-    /*Need to change 0x10 to 0x00- 0x10 means it's been repeatedly sending read commands. Shouldn't affect how it works, but 0x00 is how it's supposed to be:*/
-     recieved = SPI_T(0x10);    //cleck again if encoder is still working 
-     delay(2);    //wait a bit- not required
+     recieved = SPI_T(0x00);    //check again if encoder is still working 
+     //delay(2);    //wait a bit- not required
    }
    //Serial.println("Out of loop");
+   time2=micros();
   //delay(1000);
    temp[0] = SPI_T(0x00);    //Recieve MSB
    temp[1] = SPI_T(0x00);    // recieve LSB
@@ -78,21 +91,27 @@ void loop()
    digitalWrite(CS,HIGH);  //just to make sure   
    //SPI.end();    //end transmition
    SPI.endTransaction();
-   
+   time3=micros();
    temp[0] &=~ 0xF0;    //mask out the first 4 bits
     
    ABSposition = temp[0] << 8;    //shift MSB to correct ABSposition in ABSposition message
    ABSposition += temp[1];    // add LSB to ABSposition message to complete message
     
-   if (ABSposition != ABSposition_last)    //if nothing has changed dont wast time sending position
-   {
+//   if (ABSposition != ABSposition_last)    //if nothing has changed dont wast time sending position
+//   {
      ABSposition_last = ABSposition;    //set last position to current position
      deg = ABSposition;
      deg = deg * 0.08789;    // aprox 360/4096
-     Serial.print("Degree: ");
-     Serial.println(deg);     //send position in degrees
-   }   
-
+    // Serial.print("Degree: ");
+     Serial.print(deg);     //send position in degrees
+     Serial.print(", time to send command=");
+//     Serial.println(millis()-start_time);
+//   }   
+   Serial.print(time1-time_start);
+   Serial.print(", time in loop=");
+   Serial.print(time2-time1);
+   Serial.print(", time to get last commands and end=");
+   Serial.println(time3-time2);
    delay(10);    //wait a bit till next check
   }
   //Serial.println("Testing zero-point command, clearing queue");
@@ -107,21 +126,30 @@ void loop()
 
    Serial.println("Sending zero-point command (0x70)");
    //SPI_T(0x70);   //issue read command
-   
+   timez_start=micros();
    recieved = SPI_T(0x70);    //issue NOP to check if encoder is ready to send
    //Serial.println("In loop");
+   timez1=micros();
    while (recieved != 0x80)    //loop while encoder is not ready to send
    {
      recieved = SPI_T(0x00);    //cleck again if encoder is still working 
-     delay(20);    //wait a bit- not required
+     //delay(20);    //wait a bit- not required
    }
-   Serial.println("Zero-point done");
+   timez2=micros();
+
 //   for (int j=0; j<10; j++) {
 //    temp[0] = SPI_T(0x00);
 //   }
    digitalWrite(CS,HIGH);  //just to make sure   
    //SPI.end();    //end transmition
    SPI.endTransaction();
+   timez3=micros();
+      Serial.print("Zero-point done, time to send command=");
+   Serial.print(timez1-timez_start);
+   Serial.print(", time in loop=");
+   Serial.print(timez2-timez1);
+   Serial.print(", time to get last commands and end=");
+   Serial.println(timez3-timez2);
   delay(2000);
 
 
